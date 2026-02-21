@@ -1,0 +1,30 @@
+# Development Environment Ingress Domain Patch
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yudao
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - host: dev-api.yudao.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: yudao-gateway
+                port:
+                  number: 48080
+    - host: dev-www.yudao.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: yudao-ui-admin
+                port:
+                  number: 80

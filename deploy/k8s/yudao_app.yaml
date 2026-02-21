@@ -1,0 +1,272 @@
+# yudao-gateway Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-gateway
+  labels:
+    app: yudao-gateway
+    version: v1.0.0
+    component: gateway
+    part-of: yudao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yudao-gateway
+  template:
+    metadata:
+      labels:
+        app: yudao-gateway
+        version: v1.0.0
+    spec:
+      containers:
+        - name: yudao-gateway
+          image: yudao-gateway-image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 48080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 48080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 48080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: SPRING_PROFILES_ACTIVE
+            - name: NACOS_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: NACOS_ADDR
+
+---
+# yudao-system Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-system
+  labels:
+    app: yudao-system
+    version: v1.0.0
+    component: backend
+    part-of: yudao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yudao-system
+  template:
+    metadata:
+      labels:
+        app: yudao-system
+        version: v1.0.0
+    spec:
+      containers:
+        - name: yudao-system
+          image: yudao-system-image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 48081
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 48081
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 48081
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: SPRING_PROFILES_ACTIVE
+            - name: NACOS_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: NACOS_ADDR
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: MYSQL_HOST
+            - name: MYSQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: MYSQL_PORT
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: yudao-secret
+                  key: mysql-password
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: REDIS_HOST
+
+---
+# yudao-infra Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-infra
+  labels:
+    app: yudao-infra
+    version: v1.0.0
+    component: backend
+    part-of: yudao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yudao-infra
+  template:
+    metadata:
+      labels:
+        app: yudao-infra
+        version: v1.0.0
+    spec:
+      containers:
+        - name: yudao-infra
+          image: yudao-infra-image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 48082
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 48082
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 48082
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: SPRING_PROFILES_ACTIVE
+            - name: NACOS_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: yudao-config
+                  key: NACOS_ADDR
+
+---
+# yudao-ui-admin Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-ui-admin
+  labels:
+    app: yudao-ui-admin
+    version: v1.0.0
+    component: frontend
+    part-of: yudao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yudao-ui-admin
+  template:
+    metadata:
+      labels:
+        app: yudao-ui-admin
+        version: v1.0.0
+    spec:
+      containers:
+        - name: yudao-ui-admin
+          image: yudao-ui-admin-image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3

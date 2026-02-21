@@ -1,0 +1,50 @@
+# Kustomize Production Environment Overlay
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 引用基础配置
+namespace: production
+resources:
+  - ../../base
+
+# 生产环境特定配置
+patchesStrategicMerge:
+  - patches/deployment-replicas.yaml
+  - patches/deployment-resources.yaml
+  - patches/ingress-domain.yaml
+  - patches/image-pull-secrets.yaml
+
+# ConfigMap 生成器
+configMapGenerator:
+  - name: yudao-config
+    behavior: merge
+    literals:
+      - SPRING_PROFILES_ACTIVE=prod
+      - LOG_LEVEL=INFO
+      - NACOS_ADDR=nacos:8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=ry-cloud
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DATABASE=1
+
+# Secret 生成器（生产环境需要外部注入）
+secretGenerator:
+  - name: yudao-secret
+    behavior: merge
+    literals:
+      - mysql-password=CHANGE-ME-IN-PRODUCTION
+      - redis-password=CHANGE-ME-IN-PRODUCTION
+      - nacos-password=CHANGE-ME-IN-PRODUCTION
+
+# 生产环境镜像标签（使用具体版本号，可通过环境变量覆盖）
+images:
+  - name: yudao-gateway-image
+    newTag: v1.0.0
+  - name: yudao-system-image
+    newTag: v1.0.0
+  - name: yudao-infra-image
+    newTag: v1.0.0
+  - name: yudao-ui-admin-image
+    newTag: v1.0.0

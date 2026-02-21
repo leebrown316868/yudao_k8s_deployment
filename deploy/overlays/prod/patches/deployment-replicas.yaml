@@ -1,0 +1,28 @@
+# Production Environment - Increased Replicas
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-gateway
+spec:
+  replicas: 2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-system
+spec:
+  replicas: 2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-infra
+spec:
+  replicas: 2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-ui-admin
+spec:
+  replicas: 2

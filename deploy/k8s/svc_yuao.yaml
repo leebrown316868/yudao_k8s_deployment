@@ -1,0 +1,86 @@
+# yudao-gateway Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yudao-gateway
+  labels:
+    app: yudao-gateway
+    version: v1.0.0
+    managed-by: kubectl
+    component: gateway
+    part-of: yudao
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 48080
+      protocol: TCP
+      targetPort: http
+  selector:
+    app: yudao-gateway
+
+---
+# yudao-system Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yudao-system
+  labels:
+    app: yudao-system
+    version: v1.0.0
+    managed-by: kubectl
+    component: backend
+    part-of: yudao
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 48081
+      protocol: TCP
+      targetPort: http
+  selector:
+    app: yudao-system
+
+---
+# yudao-infra Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yudao-infra
+  labels:
+    app: yudao-infra
+    version: v1.0.0
+    managed-by: kubectl
+    component: backend
+    part-of: yudao
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 48082
+      protocol: TCP
+      targetPort: http
+  selector:
+    app: yudao-infra
+
+---
+# yudao-ui-admin Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yudao-ui-admin
+  labels:
+    app: yudao-ui-admin
+    version: v1.0.0
+    managed-by: kubectl
+    component: frontend
+    part-of: yudao
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+  selector:
+    app: yudao-ui-admin

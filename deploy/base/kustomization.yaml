@@ -1,0 +1,33 @@
+# Kustomize Base Configuration
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 命名空间
+namespace: default
+
+# 资源清单列表
+resources:
+  - namespaces.yaml
+  - ../k8s/yudao_app.yaml
+  - ../k8s/svc_yuao.yaml
+  - ../k8s/ingress_yuao.yaml
+
+# 通用标签
+commonLabels:
+  managed-by: kustomize
+  part-of: yudao
+
+# 镜像标签配置
+images:
+  - name: yudao-gateway-image
+    newName: 192.168.163.135/library/yudao_gateway
+    newTag: latest
+  - name: yudao-system-image
+    newName: 192.168.163.135/library/yudao_system
+    newTag: latest
+  - name: yudao-infra-image
+    newName: 192.168.163.135/library/yudao_infra
+    newTag: latest
+  - name: yudao-ui-admin-image
+    newName: 192.168.163.135/library/yudao_ui_admin
+    newTag: latest

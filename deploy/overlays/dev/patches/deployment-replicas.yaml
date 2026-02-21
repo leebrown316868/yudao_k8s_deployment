@@ -1,0 +1,28 @@
+# Development Environment - Reduced Replicas
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-gateway
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-system
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-infra
+spec:
+  replicas: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yudao-ui-admin
+spec:
+  replicas: 1

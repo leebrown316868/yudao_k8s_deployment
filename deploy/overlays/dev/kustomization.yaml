@@ -1,0 +1,48 @@
+# Kustomize Dev Environment Overlay
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 引用基础配置
+namespace: dev
+resources:
+  - ../../base
+
+# 开发环境特定配置
+patchesStrategicMerge:
+  - patches/deployment-replicas.yaml
+  - patches/ingress-domain.yaml
+
+# ConfigMap 生成器
+configMapGenerator:
+  - name: yudao-config
+    behavior: merge
+    literals:
+      - SPRING_PROFILES_ACTIVE=dev
+      - LOG_LEVEL=DEBUG
+      - NACOS_ADDR=nacos:8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=ry-cloud
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DATABASE=1
+
+# Secret 生成器（开发环境使用固定密码）
+secretGenerator:
+  - name: yudao-secret
+    behavior: merge
+    literals:
+      - mysql-password=dev-password-123
+      - redis-password=dev-password-123
+      - nacos-password=dev-password-123
+
+# 开发环境镜像标签
+images:
+  - name: yudao-gateway-image
+    newTag: latest
+  - name: yudao-system-image
+    newTag: latest
+  - name: yudao-infra-image
+    newTag: latest
+  - name: yudao-ui-admin-image
+    newTag: latest
