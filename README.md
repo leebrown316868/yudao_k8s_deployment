@@ -54,6 +54,20 @@
 
 ## 快速开始
 
+### 详细指南
+
+如需从头开始部署，请查看完整指南：
+
+- [完整部署指南](docs/guides/README.md) - 从环境准备到生产部署的完整流程
+- [01. 环境准备](docs/guides/01-environment-setup.md) - JDK、Maven、Git 安装
+- [02. 中间件服务](docs/guides/02-middleware-setup.md) - MySQL、Redis、Nacos
+- [03. 后端构建](docs/guides/03-backend-build.md) - 源码构建与服务启动
+- [04. 前端构建](docs/guides/04-frontend-build.md) - Vue3 管理后台
+- [05. 服务容器化](docs/guides/05-containerization.md) - Docker 镜像与 Harbor
+- [06. 集群搭建](docs/guides/06-cluster-setup.md) - K8S 集群初始化
+- [07. 组件安装](docs/guides/07-components-setup.md) - Helm、Dashboard、Ingress、MetalLB
+- [08. 项目部署](docs/guides/08-project-deployment.md) - 部署到 K8S
+
 ### 前置条件
 
 - 已完成集群初始化并安装 Flannel、Nginx Ingress、MetalLB
@@ -221,6 +235,13 @@ kubectl apply -k deploy/overlays/dev/ --dry-run=client
 ```
 
 更多问题见 [docs/troubleshooting.md](docs/troubleshooting.md)
+
+## 参考附录
+
+- [附录 A：常见问题](docs/guides/appendix-troubleshooting.md) - 问题排查与解决
+- [附录 B：面试知识点](docs/guides/appendix-interview.md) - 技术面试准备
+- [附录 C：配置文件清单](docs/guides/appendix-configs.md) - 配置文件汇总
+- [附录 D：快速参考](docs/guides/appendix-quickref.md) - 常用命令速查
 
 ## 贡献指南
 
